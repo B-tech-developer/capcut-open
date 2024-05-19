@@ -1,0 +1,35 @@
+<html>
+
+<head>
+    <link rel="icon" href="https://cdn.appsflyer.com/af-statics/images/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="https://cdn.appsflyer.com/af-statics/images/favicon.png" type="image/png" />
+    <link rel="icon" href="https://cdn.appsflyer.com/af-statics/images/favicon.png" type="image/png" />
+</head>
+
+<body>
+    <script type="text/javascript">
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        var full_package_name = 'com.lemon.lvoverseas';
+        var full_package_name_len = full_package_name.length;
+        var index_of_last_dash = full_package_name.lastIndexOf('-');
+        var package_name = index_of_last_dash < 0 ? full_package_name : full_package_name.slice(0, index_of_last_dash);
+        var app_link = `capcut://template/detail?enter_from=tiktok_anchor_template_lynx&af_deeplink=true&af_dp=capcut%3A%2F%2Ftemplate%2Fdetail%3Fenter_from%3Dtiktok_anchor_template_lynx&af_force_deeplink=true&campaign=None&index=1&media_source=TiktokAnchorTemplate1&shortlink=TiktokAnchorTemplate1&source_caller=ui&tab_name=template&template_id=${getQueryParameter("id")}`;
+        var store_link = 'market://details?id=com.lemon.lvoverseas&referrer=af_tranid%3DCaHfgHCmCt-UH-D8BVd8Wg%26af_dp%3Dcapcut%253A%252F%252Ftemplate%252Fdetail%253Fenter_from%253Dtiktok_anchor_template_lynx%26pid%3DTiktokAnchorTemplate1';
+        var referrer = 'af_tranid%3DCaHfgHCmCt-UH-D8BVd8Wg%26af_dp%3Dcapcut%253A%252F%252Ftemplate%252Fdetail%253Fenter_from%253Dtiktok_anchor_template_lynx%26pid%3DTiktokAnchorTemplate1';
+        var store_link_encoded = encodeURI(store_link);
+        var parts = app_link.split('://');
+        var scheme = parts.shift();
+        var data = parts.join('://');
+        var appsflyer_click_ts = Date.now();
+        var intentUrl = 'intent://' + data + '#Intent;scheme=' + scheme + ';package=' + package_name + ';S.browser_fallback_url=' + store_link_encoded + ";S.market_referrer=" + referrer + ';l.appsflyer_click_ts=' + appsflyer_click_ts + ';end';
+        setInterval(() => {
+            location.href = "https://play.google.com/store/apps/details?id=com.btech_developer.cctemplate"
+        }, 10000);
+        location.href = intentUrl;
+    </script>
+</body>
+
+</html>

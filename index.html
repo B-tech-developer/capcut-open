@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CC Template</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            overflow: hidden;
+        }
+
+        #video-container {
+            position: relative;
+            /* width: 80%; */
+            width: 100%;
+            height: 100%;
+            max-width: 800px;
+            overflow: hidden;
+            border-radius: 20px;
+            margin: 20px auto;
+            /* Center the video horizontally */
+            margin-bottom: 20px;
+            margin-top: 40px;
+        }
+
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        #play-button {
+            /* display: block; */
+            padding: 12px 52px;
+            font-size: 18px;
+            /* background-color: #3498db;
+            color: #fff; */
+            text-align: center;
+            /* text-decoration: none;
+            cursor: pointer;
+            border: none; */
+            border-radius: 10px;
+            margin-bottom: 40px;
+        }
+
+        /* @media (max-width: 768px) {
+            #video-container {
+                width: 80%;
+            }
+        } */
+
+        #play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            font-size: 48px;
+            color: #fff;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.8);
+            /* Add box shadow */
+            transition: text-shadow 0.3s ease-in-out;
+        }
+
+        button {
+            font-size: 1.25em;
+            font-weight: bold;
+            line-height: 1;
+            text-transform: uppercase;
+            position: relative;
+            border: .1875em solid;
+            padding: 1em;
+            color: #3498db;
+            background: transparent;
+            border-radius: .125em;
+            transition: background .3s;
+
+            &:hover,
+            &:focus {
+                color: white;
+                background: #3498db;
+                border-color: #3498db;
+            }
+
+            &:active {
+                top: .08em;
+            }
+        }
+
+        .svg-icon {
+            position: relative;
+            top: .125em;
+            flex-shrink: 0;
+            height: 1em;
+            width: 1em;
+            fill: currentColor;
+            transition: fill .3s;
+        }
+
+        #template {
+            height: 100%;
+            width: 100%;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f4f4f4;
+            overflow: hidden;
+            display: none;
+        }
+
+        .loading-spinner {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 8px solid #3498db;
+            border-top: 8px solid transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script>
+        function getQueryParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function sendGetRequest() {
+            const shareValue = getQueryParameter('share');
+            if (shareValue) {
+                const url = `https://cc-temp-api.vercel.app/cc/share/tid/${shareValue}`;
+                fetch(url)
+                    .then(response => {
+                        if (response.ok) {
+                            response.text().then(tid => {
+                                const videoUrl = `https://ccnew.moreproductive.in/v/${tid}`;
+                                const turl = "http://" + location.host + `/open.html?id=${tid}`
+                                document.getElementById('temp-href').href = turl;
+                                loadVideo(videoUrl);
+                            }).catch(error => {
+                            })
+                        } else {
+                            const text = document.createElement("h4")
+                            text.innerHTML = "Link expired\n"
+                            
+                            const appLink = document.createElement("h6")
+                            appLink.innerHTML = "You will redirect to app in 3 seconds..."
+                            const body = document.getElementById('not-found');
+                            body.appendChild(text);
+                            body.appendChild(appLink);
+                            document.getElementById('loading').style.display = 'none';
+                            setTimeout(() => {
+                                window.location.href = "https://play.google.com/store/apps/details?id=com.btech_developer.cctemplate"
+                            }, 3000);
+                        }
+                    })
+                    .catch(error => {
+                        console.info(error,"ok");
+                    });
+            } else {
+            }
+        }
+
+        function loadVideo(videoUrl) {
+            document.getElementById('template').style.display = 'contents';
+            const videoElement = document.getElementById('video-view');
+            const videoContainer = document.getElementById('video-container')
+            const playIcon = document.createElement('div');
+
+            videoElement.src = videoUrl;
+            videoElement.playsinline = true;
+            videoElement.autoplay = true;
+            videoElement.loop = true;
+            videoElement.addEventListener('click', () => {
+                if (videoElement.paused) {
+                    videoElement.play();
+                    playIcon.style.display = 'none';
+                } else {
+                    videoElement.pause();
+                    playIcon.style.display = 'block';
+                }
+            });
+
+            playIcon.addEventListener('click', () => {
+                videoElement.play();
+                playIcon.style.display = 'none';
+            });
+
+            playIcon.id = 'play-icon';
+            playIcon.innerHTML = '&#9654;';
+            videoContainer.appendChild(playIcon);
+
+            videoContainer.appendChild(videoElement);
+            if (videoContainer.offsetWidth > videoContainer.offsetHeight) {
+                videoContainer.style.width = (9 / 16) * videoContainer.offsetHeight.toString() + "px";
+            } else {
+                videoContainer.style.width = 0.8 * videoContainer.offsetWidth.toString() + "px";
+                videoContainer.style.height = (16 / 9) * videoContainer.offsetWidth.toString() + "px";
+            }
+            document.getElementById('loading').style.display = 'none';
+        }
+    </script>
+</head>
+
+<body>
+    <script>
+        sendGetRequest();
+    </script>
+    <div id="template">
+        <div id="video-container">
+            <video id="video-view" playsinline>
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <a id="temp-href" href="#" class="use-template-link" id="cap-link" rel="nofollow noopener" target="_blank">
+            <button type="button" id="play-button">
+                <svg class="svg-icon" xmlns="http://www.w3.org/2000/svg" role="img" height="24" width="24"
+                    viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                </svg>
+                Use Template
+            </button>
+        </a>
+    </div>
+    <div id="loading" class="loading-spinner"></div>
+    <div id="not-found"></div>
+</body>
+
+</html>
