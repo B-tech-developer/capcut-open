@@ -153,7 +153,7 @@
         function sendGetRequest() {
             const shareValue = getQueryParameter('share');
             if (shareValue) {
-                const url = `https://cc-temp-api.vercel.app/cc/share/tid/${shareValue}`;
+                const url = `https://api.moreproductive.in/cc/share/tid/${shareValue}`;
                 fetch(url)
                     .then(response => {
                         if (response.ok) {
